@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:35:20 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/21 18:10:05 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/02/22 05:53:36 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	check_access(t_px *px, int ac, char **av)
     i = -1;
     while (++i < ac)
         check_command(px, av[i], i);
-    ft_print_split_map(px->cmd);
+    //ft_print_split_map(px->cmd);
 }
 
 t_px	parse(int ac, char **av, char **env)
@@ -57,7 +57,7 @@ t_px	parse(int ac, char **av, char **env)
 
 	i = 0;
 	init_px(&px);
-	if (ac != 5)
+	if (ac < 4)
 		error(&px, INVALID_AC_AMOUNT);
 	if (!env)
 		error(&px, PATH_NOT_FOUND);
@@ -68,7 +68,8 @@ t_px	parse(int ac, char **av, char **env)
 	px.env = ft_split(env[i] + 5, ':');
 	if (!px.env)
 		error(&px, MALLOC_ERROR);
-    px.cmd = ft_calloc(sizeof(char **), ac - 3 + 1);
+    px.total_cmd = ac - 3;
+    px.cmd = ft_calloc(sizeof(char **), px.total_cmd + 1);
     if (!px.cmd)
         error(&px, MALLOC_ERROR);
     check_access(&px, ac - 3, av + 2);

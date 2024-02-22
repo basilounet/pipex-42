@@ -3,7 +3,8 @@
 SRC = parse.c \
 		struct_init.c \
 		unleak.c \
-		errors.c
+		errors.c \
+		fork.c
 MAIN = pipex.c
 #BONUS_MAIN = pipex_bonus.c
 

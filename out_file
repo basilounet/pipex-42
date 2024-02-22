@@ -1,0 +1,12 @@
+errors.c
+fork.c
+in_file
+libft
+Makefile
+out_file
+parse.c
+pipex
+pipex.c
+pipex.h
+struct_init.c
+unleak.c
