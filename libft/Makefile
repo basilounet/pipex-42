@@ -91,17 +91,53 @@ CC = clang
 
 ##========== FLAGS ==========##
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 NAME = libft.a
 
-all : $(NAME)
+##========== MODES ==========##
+
+TIMER = 0.0
+IS_PRINT = 1
+
+ifdef DEBUG
+    CFLAGS += -g
+endif
+
+##========== ANIMATIONS ==========##
+
+NUM_SRC = $(words $(SRC))
+INDEX = 0
+NUM_LINES_TO_CLEAR = 1
+
+all : $(CLEAR) $(NAME)
 
 $(NAME) : $(OBJ)
 	@ar rcs $(NAME) $(OBJ)
 	@echo "$(RED)Libft compiled$(BASE_COLOR)"
 
 %.o : %.c
+##	@echo -e "\033[$(shell expr $(NUM_LINES_TO_CLEAR));H\033[K"
+ifeq ($(IS_PRINT),1)
+	@sleep $(TIMER)
+	@clear
+	@echo "$(RED)Compiling Libft$(BASE_COLOR)"
+	@echo "╔==================================================╗"
+	@echo -n "║$(RED)"
+	@echo -n "▓"
+	@for i in $$(seq 1 $$(expr $(INDEX) \* 50 / $(NUM_SRC))); do \
+		echo -n "▓"; \
+	done
+	@for i in $$(seq 1 $$(expr 49 - $(INDEX) \* 50 / $(NUM_SRC))); do \
+		echo -n " "; \
+	done
+	@echo "$(BASE_COLOR)║"
+	@echo "╚==================================================╝"
+	@$(eval INDEX=$(shell expr $(INDEX) + 1))
+	@echo "Compiling : $<"
+	$(CC) $(CFLAGS) -c $< -o $@
+else
 	@$(CC) $(CFLAGS) -c $< -o $@
+endif
 
 clean :
 	@rm -rf $(OBJ)

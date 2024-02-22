@@ -6,14 +6,12 @@ SRC = parse.c \
 		errors.c \
 		fork.c
 MAIN = pipex.c
-#BONUS_MAIN = pipex_bonus.c
 
 
 ##========== OBJECTS ==========##
 
 OBJS = $(SRC:.c=.o)
 MAIN_OBJ = $(MAIN:.c=.o)
-#BONUS_MAIN_OBJ = $(BONUS_MAIN:.c=.o)
 
 ##========== COLORS ==========##
 
@@ -34,43 +32,86 @@ CC = clang
 
 ##========== FLAGS ==========##
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = $(LIBS) -fsanitize=address
-LIBS := -Llibft -lft
+LIBS = -Llibft -lft
 LIBFT = libft/libft.a
 
 ##========== NAMES ==========##
 
 NAME = pipex
 
-all : $(NAME)
+##========== MODES ==========##
+
+TIMER = 0.0
+IS_PRINT = 1
+
+ifdef DEBUG
+    CFLAGS += -g
+	DEBUG_MODE = 1
+endif
+
+ifdef FAST
+	J4 = -j4
+endif
+
+##========== ANIMATIONS ==========##
+
+NUM_SRC = $(words $(SRC))
+INDEX = 0
+NUM_LINES_TO_CLEAR = 1
+
+all : $(CLEAR) $(NAME)
 
 $(NAME) : $(OBJS) $(LIBFT) $(MAIN_OBJ)
-		$(CC) -o $(NAME) $(CFLAGS) $(MAIN_OBJ) $(OBJS) $(LDFLAGS)
-
-%.o : %.c
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) -o $(NAME) $(CFLAGS) $(MAIN_OBJ) $(OBJS) $(LDFLAGS)
+	@echo "$(GREEN)Pipex compiled$(BASE_COLOR)"
 
 $(LIBFT) :
-	@$(MAKE) -C libft --no-print-directory -j4
+	@DEBUG=$(DEBUG_MODE) TIMER=$(TIMER) IS_PRINT=$(IS_PRINT) $(MAKE) -C libft --no-print-directory $(J4)
+
+clean :
+	@rm -rf $(OBJS)
+	@rm -rf $(MAIN_OBJ)
+	@$(MAKE) -C libft clean --no-print-directory
+
+fclean : clean
+	@rm -rf $(NAME)
+	@$(MAKE) -C libft fclean --no-print-directory
+	@echo "$(CYAN)Files cleaned$(BASE_COLOR)"
+
+re : fclean all
+
+%.o : %.c
+##	@echo -e "\033[$(shell expr $(NUM_LINES_TO_CLEAR));H\033[K"
+ifeq ($(IS_PRINT),1)
+	@sleep $(TIMER)
+	@clear
+	@echo "$(GREEN)Compiling Pipex$(BASE_COLOR)"
+	@echo "╔==============================================╗"
+	@echo -n "║$(GREEN)"
+	@echo -n "▓"
+	@for i in $$(seq 1 $$(expr $(INDEX) \* 45 / $(NUM_SRC))); do \
+		echo -n "▓"; \
+	done
+	@for i in $$(seq 1 $$(expr 45 - $(INDEX) \* 45 / $(NUM_SRC))); do \
+		echo -n " "; \
+	done
+	@echo "$(BASE_COLOR)║"
+	@echo "╚==============================================╝"
+	@$(eval INDEX=$(shell expr $(INDEX) + 1))
+	@echo "Compiling : $<"
+	$(CC) $(CFLAGS) -c $< -o $@
+else
+	@$(CC) $(CFLAGS) -c $< -o $@
+endif
+
+
 
 #bonus : all $(CHECKER)
 #
 #$(CHECKER) : $(OBJS) $(LIBFT) $(BONUS_MAIN_OBJ)
 #		$(CC) -o $(CHECKER) $(CFLAGS) $(BONUS_MAIN_OBJ) $(OBJS) $(LDFLAGS)
 
-clean :
-	@rm -rf $(OBJS)
-	@rm -rf $(MAIN_OBJ)
-#	@rm -rf $(BONUS_MAIN_OBJ)
-	@$(MAKE) -C libft clean --no-print-directory
-
-fclean : clean
-	@rm -rf $(NAME)
-#	@rm -rf $(CHECKER)
-	@$(MAKE) -C libft fclean --no-print-directory
-	@echo "$(CYAN)Files cleaned$(BASE_COLOR)"
-
-re : fclean all
 
 .PHONY : all bonus clean fclean re

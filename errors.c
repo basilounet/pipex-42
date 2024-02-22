@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:47:19 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/22 05:10:39 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/02/22 06:32:42 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	error(t_px *px, enum e_errors name)
 	unleak(px);
 	if (name == MALLOC_ERROR)
 		write(2, "[ ! ERROR ! ] A malloc error occured\n", 37);
-    else if (name == INVALID_AC_AMOUNT)
+	else if (name == INVALID_AC_AMOUNT)
 		write(2, "[ ! ERROR ! ] Incorrect numbers of arguments\n", 45);
 	else if (name == PATH_NOT_FOUND)
 		write(2, "[ ! ERROR ! ] The path was not found\n", 37);
