@@ -4,7 +4,8 @@ SRC = parse.c \
 		struct_init.c \
 		unleak.c \
 		errors.c \
-		fork.c
+		fork.c \
+		here_doc.c
 MAIN = pipex.c
 
 

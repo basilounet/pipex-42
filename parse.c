@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:35:20 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/22 06:32:34 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/02/22 11:18:57 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	check_command(t_px *px, char *command, int index)
 			free(cmd[0]);
 			cmd[0] = str;
 			px->cmd[index] = cmd;
+			ft_print_map(px->cmd[index]);
 			return ;
 		}
 		free(str);
@@ -46,7 +47,9 @@ void	check_access(t_px *px, int ac, char **av)
 
 	i = -1;
 	while (++i < ac)
+	{
 		check_command(px, av[i], i);
+	}
 }
 
 t_px	parse(int ac, char **av, char **env)
@@ -72,5 +75,6 @@ t_px	parse(int ac, char **av, char **env)
 	if (!px.cmd)
 		error(&px, MALLOC_ERROR);
 	check_access(&px, ac - 3, av + 2);
+	ft_print_split_map(px.cmd);
 	return (px);
 }

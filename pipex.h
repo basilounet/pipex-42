@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:48:36 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/22 06:32:52 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/02/22 11:00:54 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,9 @@ t_px		parse(int ac, char **av, char **env);
 
 void		child(t_px *px, int input_fd[2], int output_fd[2]);
 void		parent(t_px *px, int old_pipe[2], int new_pipe[2]);
+
+/*========== HERE_DOCS ==========*/
+
+void		here_doc(int ac, char **av, char **env);
 
 #endif

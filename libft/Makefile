@@ -6,11 +6,7 @@ SRC = ft_abs.c \
 	ft_bzero.c \
 	ft_calloc.c \
 	ft_countc.c \
-	ft_isalnum.c \
-	ft_isalpha.c \
-	ft_isascii.c \
-	ft_isdigit.c \
-	ft_isprint.c \
+	ft_is_x.c \
 	ft_itoa.c \
 	ft_itob.c \
 	ft_lennum.c \

@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isascii.c                                       :+:      :+:    :+:   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/12 23:52:32 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/30 16:31:35 by bvasseur         ###   ########.fr       */
+/*   Created: 2024/02/22 10:25:27 by bvasseur          #+#    #+#             */
+/*   Updated: 2024/02/22 11:17:42 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "pipex.h"
 
-int	ft_isascii(int c)
+void	here_doc(int ac, char **av, char **env)
 {
-	return (c >= 0 && c < 128);
+    t_px    px;
+
+    px = parse(ac - 1, av + 2, env);
+    unleak(&px);
+    exit(0);
 }
