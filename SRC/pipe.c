@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/21 13:32:37 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/22 11:03:22 by bvasseur         ###   ########.fr       */
+/*   Created: 2024/02/23 17:54:18 by bvasseur          #+#    #+#             */
+/*   Updated: 2024/02/26 08:03:07 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../include/pipex.h"
 
 void	sole_pipe(t_px *px, int input_files[2])
 {
@@ -20,7 +20,7 @@ void	sole_pipe(t_px *px, int input_files[2])
 	if (pid < 0)
 		error(px, FORK_ERROR);
 	if (pid == 0)
-		child(px, input_files, input_files);
+		child(px, input_files, input_files, input_files);
 	else
 	{
 		close(input_files[READ]);
@@ -38,7 +38,7 @@ void	first_pipe(t_px *px, int input_files[2], int new_pipe[2])
 	if (pid < 0)
 		error(px, FORK_ERROR);
 	if (pid == 0)
-		child(px, input_files, new_pipe);
+		child(px, input_files, new_pipe, input_files);
 	else
 	{
 		close(input_files[READ]);
@@ -56,7 +56,7 @@ void	last_pipe(t_px *px, int input_files[2], int new_pipe[2])
 	if (pid < 0)
 		error(px, FORK_ERROR);
 	if (pid == 0)
-		child(px, new_pipe, input_files);
+		child(px, new_pipe, input_files, input_files);
 	else
 	{
 		close(input_files[WRITE]);
@@ -81,7 +81,7 @@ void	pipex(t_px *px, int input_files[2])
 		if (pid < 0)
 			error(px, FORK_ERROR);
 		if (pid == 0)
-			child(px, old_pipe, new_pipe);
+			child(px, old_pipe, new_pipe, input_files);
 		else
 		{
 			parent(px, old_pipe, new_pipe);
@@ -89,23 +89,4 @@ void	pipex(t_px *px, int input_files[2])
 		px->index++;
 	}
 	last_pipe(px, input_files, new_pipe);
-}
-
-int	main(int ac, char **av, char **env)
-{
-	t_px	px;
-	int		input_files[2];
-
-	if (ac > 1 && !ft_strncmp(av[1], "here_doc", 8))
-		here_doc(ac, av, env);
-	px = parse(ac, av, env);
-	input_files[READ] = open(av[1], O_RDONLY);
-	input_files[WRITE] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (input_files[READ] < 0 || input_files[WRITE] < 0)
-		error(&px, FILE_ERROR);
-	else if (ac == 4)
-		sole_pipe(&px, input_files);
-	else
-		pipex(&px, input_files);
-	unleak(&px);
 }

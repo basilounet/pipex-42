@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unleak.c                                           :+:      :+:    :+:   */
+/*   struct_init.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/21 13:54:14 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/22 05:08:09 by bvasseur         ###   ########.fr       */
+/*   Created: 2024/02/21 13:53:54 by bvasseur          #+#    #+#             */
+/*   Updated: 2024/02/23 16:01:12 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../include/pipex.h"
 
-void	unleak(t_px *px)
+void	init_px(t_px *px)
 {
-	ft_free_map(px->env, ft_maplen(px->env));
-	ft_free_split_map(px->cmd);
+	px->env = NULL;
+	px->cmd = NULL;
+	px->index = 0;
+	px->total_cmd = 0;
 }

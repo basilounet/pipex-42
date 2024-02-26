@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 20:08:12 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/23 14:19:00 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/02/26 07:58:34 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ long				ft_atol(const char *str);
 char				*ft_itoa(int n);
 char				*ft_itob(unsigned long n, const char *base);
 int					ft_btoi(char *str, const char *base);
-
 
 /*========== CHAR ==========*/
 

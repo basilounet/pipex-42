@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   here_doc.c                                         :+:      :+:    :+:   */
+/*   unleak.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/22 10:25:27 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/22 11:17:42 by bvasseur         ###   ########.fr       */
+/*   Created: 2024/02/21 13:54:14 by bvasseur          #+#    #+#             */
+/*   Updated: 2024/02/23 16:01:34 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../include/pipex.h"
 
-void	here_doc(int ac, char **av, char **env)
+void	unleak(t_px *px)
 {
-    t_px    px;
-
-    px = parse(ac - 1, av + 2, env);
-    unleak(&px);
-    exit(0);
+	ft_free_map(px->env, ft_maplen(px->env));
+	ft_free_split_map(px->cmd);
 }

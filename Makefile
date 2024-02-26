@@ -5,17 +5,24 @@ SRC = parse.c \
 		unleak.c \
 		errors.c \
 		fork.c \
+		pipe.c \
 		here_doc.c
 MAIN = pipex.c
 
+##========== NAMES ==========##
+
+NAME = pipex
+SRCS_DIR = SRC/
+OBJS_DIR = OBJ/
 
 ##========== OBJECTS ==========##
 
-OBJS = $(SRC:.c=.o)
-MAIN_OBJ = $(MAIN:.c=.o)
+PRE_OBJS = $(SRC:.c=.o)
+PRE_MAIN_OBJ = $(MAIN:.c=.o)
+OBJS = $(addprefix $(OBJS_DIR),$(PRE_OBJS))
+MAIN_OBJ = $(addprefix $(OBJS_DIR),$(PRE_MAIN_OBJ))
 
 ##========== COLORS ==========##
-
 
 BASE_COLOR 	=		\033[0;39m
 GRAY 		=		\033[0;90m
@@ -34,13 +41,10 @@ CC = clang
 ##========== FLAGS ==========##
 
 CFLAGS = -Wall -Wextra -Werror
-LDFLAGS = $(LIBS) -fsanitize=address
+LDFLAGS = $(LIBS) #-fsanitize=address
 LIBS = -Llibft -lft
 LIBFT = libft/libft.a
 
-##========== NAMES ==========##
-
-NAME = pipex
 
 ##========== MODES ==========##
 
@@ -72,8 +76,7 @@ $(LIBFT) :
 	@DEBUG=$(DEBUG_MODE) TIMER=$(TIMER) IS_PRINT=$(IS_PRINT) $(MAKE) -C libft --no-print-directory $(J4)
 
 clean :
-	@rm -rf $(OBJS)
-	@rm -rf $(MAIN_OBJ)
+	@rm -rf $(OBJS_DIR)
 	@$(MAKE) -C libft clean --no-print-directory
 
 fclean : clean
@@ -83,8 +86,9 @@ fclean : clean
 
 re : fclean all
 
-%.o : %.c
+$(OBJS_DIR)%.o : $(SRCS_DIR)%.c
 ##	@echo -e "\033[$(shell expr $(NUM_LINES_TO_CLEAR));H\033[K"
+	@mkdir -p $(OBJS_DIR)
 ifeq ($(IS_PRINT),1)
 	@sleep $(TIMER)
 	@clear

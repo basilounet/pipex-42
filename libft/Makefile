@@ -65,9 +65,16 @@ SRC = ft_abs.c \
 	ft_toupper.c \
 	get_next_line_bonus.c
 
+##========== NAMES ==========##
+
+NAME = libft.a
+SRCS_DIR = SRC/
+OBJS_DIR = OBJ/
+
 ##========== OBJECTS ==========##
 
-OBJ = $(SRC:.c=.o)
+PRE_OBJS = $(SRC:.c=.o)
+OBJ = $(addprefix $(OBJS_DIR),$(PRE_OBJS))
 
 ##========== COLORS ==========##
 
@@ -88,7 +95,6 @@ CC = clang
 ##========== FLAGS ==========##
 
 CFLAGS = -Wall -Wextra -Werror
-NAME = libft.a
 
 ##========== MODES ==========##
 
@@ -111,8 +117,9 @@ $(NAME) : $(OBJ)
 	@ar rcs $(NAME) $(OBJ)
 	@echo "$(RED)Libft compiled$(BASE_COLOR)"
 
-%.o : %.c
+$(OBJS_DIR)%.o : $(SRCS_DIR)%.c
 ##	@echo -e "\033[$(shell expr $(NUM_LINES_TO_CLEAR));H\033[K"
+	@mkdir -p $(OBJS_DIR)
 ifeq ($(IS_PRINT),1)
 	@sleep $(TIMER)
 	@clear
@@ -136,7 +143,7 @@ else
 endif
 
 clean :
-	@rm -rf $(OBJ)
+	@rm -rf $(OBJS_DIR)
 
 fclean : clean
 	@rm -rf $(NAME)

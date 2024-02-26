@@ -6,11 +6,11 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:47:19 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/22 06:32:42 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/02/23 16:00:51 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../include/pipex.h"
 
 void	error(t_px *px, enum e_errors name)
 {

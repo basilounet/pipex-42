@@ -6,37 +6,35 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:35:20 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/22 11:18:57 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:19:32 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../include/pipex.h"
 
 void	check_command(t_px *px, char *command, int index)
 {
-	char	**cmd;
 	char	*str;
 	int		i;
 
-	i = 0;
-	cmd = ft_split(command, ' ');
-	if (!cmd)
+	i = -1;
+	px->cmd[index] = ft_split(command, ' ');
+	if (!px->cmd[index])
 		error(px, MALLOC_ERROR);
-	while (px->env[i])
+	if (!access(px->cmd[index][0], F_OK) && !access(px->cmd[index][0], X_OK))
+		return ;
+	while (px->env[++i])
 	{
-		str = ft_strjoin3(px->env[i], "/", cmd[0]);
+		str = ft_strjoin3(px->env[i], "/", px->cmd[index][0]);
 		if (!str)
 			error(px, MALLOC_ERROR);
 		if (!access(str, F_OK) && !access(str, X_OK))
 		{
-			free(cmd[0]);
-			cmd[0] = str;
-			px->cmd[index] = cmd;
-			ft_print_map(px->cmd[index]);
+			free(px->cmd[index][0]);
+			px->cmd[index][0] = str;
 			return ;
 		}
 		free(str);
-		i++;
 	}
 	error(px, PATH_NOT_FOUND);
 }
@@ -47,9 +45,7 @@ void	check_access(t_px *px, int ac, char **av)
 
 	i = -1;
 	while (++i < ac)
-	{
 		check_command(px, av[i], i);
-	}
 }
 
 t_px	parse(int ac, char **av, char **env)
@@ -75,6 +71,7 @@ t_px	parse(int ac, char **av, char **env)
 	if (!px.cmd)
 		error(&px, MALLOC_ERROR);
 	check_access(&px, ac - 3, av + 2);
-	ft_print_split_map(px.cmd);
 	return (px);
 }
+
+// start here_doc stop "cat -e" "grep i" out_file
