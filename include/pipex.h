@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:48:36 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/26 07:58:05 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/02/26 18:25:16 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,15 @@ enum		e_errors
 	INVALID_AC_AMOUNT = 2,
 	PATH_NOT_FOUND = 3,
 	FILE_ERROR = 4,
-	FORK_ERROR = 5
+	FORK_ERROR = 5,
+	ENV_ERROR = 6
 };
 
 typedef struct s_px
 {
 	char	**env;
 	char	***cmd;
+	pid_t	*pid;
 	int		index;
 	int		total_cmd;
 }			t_px;
@@ -38,6 +40,8 @@ typedef struct s_px
 /*========== ERRORS ==========*/
 
 void		error(t_px *px, enum e_errors name);
+void		pipe_func_error(t_px *px, int input_fd[2], int output_fd[2],
+				int original_files[2]);
 
 /*========== UNLEAK ==========*/
 

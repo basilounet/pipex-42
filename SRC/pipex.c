@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:32:37 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/23 17:55:02 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/02/26 16:00:30 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,17 @@ int	main(int ac, char **av, char **env)
 	input_files[READ] = open(av[1], O_RDONLY);
 	input_files[WRITE] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (input_files[READ] < 0 || input_files[WRITE] < 0)
+	{
+		if (input_files[0] >= 0)
+			close(input_files[0]);
+		if (input_files[1] >= 0)
+			close(input_files[1]);
 		error(&px, FILE_ERROR);
+	}
 	else if (ac == 4)
 		sole_pipe(&px, input_files);
 	else
 		pipex(&px, input_files);
 	unleak(&px);
+	return (0);
 }

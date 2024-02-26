@@ -1,17 +1,5 @@
-The crazy$$
-dog is running$$
-wild,$$
-froggin' and moggin'$$
-in The		$$
-mornin'$$
-$$
-9$$
-8$$
-7  $$
-7$$
-6$$
-5$$
-4$$
-3$$
-2$$
-1$$
+  `-ubuntu--vg-ubuntu--lv--goinfre 253:1    0  35.5G  0 lvm  /goinfre
+  |-ubuntu--vg-ubuntu--lv--root    253:0    0 189.6G  0 lvm  /
+`-nvme0n1p3                        259:3    0   237G  0 part 
+|-nvme0n1p1                        259:1    0   512M  0 part /boot/efi
+|-nvme0n1p2                        259:2    0     1G  0 part /boot

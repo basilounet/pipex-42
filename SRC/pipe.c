@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 17:54:18 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/26 08:03:07 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/02/26 18:29:33 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ void	first_pipe(t_px *px, int input_files[2], int new_pipe[2])
 {
 	int	pid;
 
-	pipe(new_pipe);
+	if (pipe(new_pipe) == -1)
+		error(px, ENV_ERROR);
 	pid = fork();
+	px->pid[0] = pid;
 	if (pid < 0)
 		error(px, FORK_ERROR);
 	if (pid == 0)
@@ -44,49 +46,51 @@ void	first_pipe(t_px *px, int input_files[2], int new_pipe[2])
 		close(input_files[READ]);
 		close(new_pipe[WRITE]);
 		px->index++;
-		wait(NULL);
 	}
 }
 
-void	last_pipe(t_px *px, int input_files[2], int new_pipe[2])
+void	last_pipe(t_px *px, int original_files[2], int new_pipe[2])
 {
 	int	pid;
 
 	pid = fork();
+	px->pid[px->total_cmd - 1] = pid;
 	if (pid < 0)
 		error(px, FORK_ERROR);
 	if (pid == 0)
-		child(px, new_pipe, input_files, input_files);
+		child(px, new_pipe, original_files, original_files);
 	else
 	{
-		close(input_files[WRITE]);
+		close(original_files[WRITE]);
 		close(new_pipe[READ]);
-		wait(NULL);
 	}
 }
 
 void	pipex(t_px *px, int input_files[2])
 {
-	int	new_pipe[2];
-	int	old_pipe[2];
-	int	pid;
+	int		new_pipe[2];
+	int		old_pipe[2];
+	pid_t	pid;
+	int		i;
 
 	first_pipe(px, input_files, new_pipe);
 	while (px->index < px->total_cmd - 1)
 	{
 		old_pipe[0] = new_pipe[0];
 		old_pipe[1] = new_pipe[1];
-		pipe(new_pipe);
+		if (pipe(new_pipe) == -1)
+			pipe_func_error(px, old_pipe, new_pipe, input_files);
 		pid = fork();
+		px->pid[px->index++] = pid;
 		if (pid < 0)
 			error(px, FORK_ERROR);
 		if (pid == 0)
 			child(px, old_pipe, new_pipe, input_files);
 		else
-		{
 			parent(px, old_pipe, new_pipe);
-		}
-		px->index++;
 	}
 	last_pipe(px, input_files, new_pipe);
+	i = 0;
+	while (i < px->total_cmd)
+		waitpid(px->pid[i++], NULL, 0);
 }

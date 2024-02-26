@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:25:27 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/26 09:20:24 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/02/26 11:18:50 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,27 +47,6 @@ void	get_new_file(t_px *px, char *stop)
 		free(line);
 }
 
-void	remove_here_doc(t_px *px)
-{
-	char	**av;
-	int		pid;
-
-	av = ft_calloc(sizeof(char *), 4);
-	if (!av)
-		return ;
-	av[0] = "/usr/bin/rm";
-	av[1] = "-rf";
-	av[2] = "heredoc";
-	pid = fork();
-	if (pid < 0)
-		error(px, FORK_ERROR);
-	if (pid == 0)
-		execve(av[0], av, px->env);
-	else
-		wait(NULL);
-	free(av);
-}
-
 void	here_doc(int ac, char **av, char **env)
 {
 	t_px	px;
@@ -83,7 +62,7 @@ void	here_doc(int ac, char **av, char **env)
 		sole_pipe(&px, input_files);
 	else
 		pipex(&px, input_files);
-	remove_here_doc(&px);
+	unlink("heredoc");
 	unleak(&px);
 	exit(0);
 }
