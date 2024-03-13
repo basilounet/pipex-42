@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:25:27 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/26 11:18:50 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/03/13 09:37:48 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,17 @@ void	here_doc(int ac, char **av, char **env)
 	t_px	px;
 	int		input_files[2];
 
-	px = parse(ac - 1, av + 1, env);
-	get_new_file(&px, ft_strjoin(av[2], "\n"));
+	px = parse(ac - 2, av + 2, env);
+	get_new_file(&px, ft_strjoin(av[1], "\n"));
 	input_files[READ] = open("heredoc", O_RDONLY);
 	input_files[WRITE] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (input_files[READ] < 0 || input_files[WRITE] < 0)
 		error(&px, FILE_ERROR);
-	else if (ac == 5)
+	else if (ac == 4)
 		sole_pipe(&px, input_files);
 	else
-		pipex(&px, input_files);
+		all_pipes(&px, input_files);
 	unlink("heredoc");
 	unleak(&px);
 	exit(0);
 }
-
-//      here_doc stop ls sort "grep i" out_file

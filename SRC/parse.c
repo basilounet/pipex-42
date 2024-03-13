@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:35:20 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/26 15:16:43 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/03/13 10:05:54 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_px	parse(int ac, char **av, char **env)
 
 	i = 0;
 	init_px(&px);
-	if (ac < 4)
+	if (ac < 3)
 		error(&px, INVALID_AC_AMOUNT);
 	if (!env)
 		error(&px, PATH_NOT_FOUND);
@@ -70,13 +70,11 @@ t_px	parse(int ac, char **av, char **env)
 	px.env = ft_split(env[i] + 5, ':');
 	if (!px.env)
 		error(&px, MALLOC_ERROR);
-	px.total_cmd = ac - 3;
+	px.total_cmd = ac - 2;
 	px.cmd = ft_calloc(sizeof(char **), px.total_cmd + 1);
 	px.pid = ft_calloc(sizeof(pid_t), px.total_cmd + 1);
 	if (!px.cmd || !px.pid)
 		error(&px, MALLOC_ERROR);
-	check_access(&px, ac - 3, av + 2);
+	check_access(&px, ac - 2, av + 1);
 	return (px);
 }
-
-// start in_file "cat" "" out_file

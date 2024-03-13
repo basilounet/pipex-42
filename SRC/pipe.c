@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 17:54:18 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/26 18:29:33 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/03/13 10:03:17 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	sole_pipe(t_px *px, int input_files[2])
 	if (pid < 0)
 		error(px, FORK_ERROR);
 	if (pid == 0)
-		child(px, input_files, input_files, input_files);
+		pipex_child(px, input_files, input_files, input_files);
 	else
 	{
 		close(input_files[READ]);
@@ -40,12 +40,11 @@ void	first_pipe(t_px *px, int input_files[2], int new_pipe[2])
 	if (pid < 0)
 		error(px, FORK_ERROR);
 	if (pid == 0)
-		child(px, input_files, new_pipe, input_files);
+		pipex_child(px, input_files, new_pipe, input_files);
 	else
 	{
 		close(input_files[READ]);
 		close(new_pipe[WRITE]);
-		px->index++;
 	}
 }
 
@@ -58,7 +57,7 @@ void	last_pipe(t_px *px, int original_files[2], int new_pipe[2])
 	if (pid < 0)
 		error(px, FORK_ERROR);
 	if (pid == 0)
-		child(px, new_pipe, original_files, original_files);
+		pipex_child(px, new_pipe, original_files, original_files);
 	else
 	{
 		close(original_files[WRITE]);
@@ -66,7 +65,7 @@ void	last_pipe(t_px *px, int original_files[2], int new_pipe[2])
 	}
 }
 
-void	pipex(t_px *px, int input_files[2])
+void	all_pipes(t_px *px, int input_files[2])
 {
 	int		new_pipe[2];
 	int		old_pipe[2];
@@ -74,20 +73,20 @@ void	pipex(t_px *px, int input_files[2])
 	int		i;
 
 	first_pipe(px, input_files, new_pipe);
-	while (px->index < px->total_cmd - 1)
+	while (++px->index <= px->total_cmd - 2)
 	{
 		old_pipe[0] = new_pipe[0];
 		old_pipe[1] = new_pipe[1];
 		if (pipe(new_pipe) == -1)
 			pipe_func_error(px, old_pipe, new_pipe, input_files);
 		pid = fork();
-		px->pid[px->index++] = pid;
+		px->pid[px->index] = pid;
 		if (pid < 0)
 			error(px, FORK_ERROR);
 		if (pid == 0)
-			child(px, old_pipe, new_pipe, input_files);
+			pipex_child(px, old_pipe, new_pipe, input_files);
 		else
-			parent(px, old_pipe, new_pipe);
+			pipex_parent(px, old_pipe, new_pipe);
 	}
 	last_pipe(px, input_files, new_pipe);
 	i = 0;

@@ -6,13 +6,13 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 02:50:01 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/02/26 17:59:43 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/03/13 10:17:13 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	child(t_px *px, int input_fd[2], int output_fd[2],
+void	pipex_child(t_px *px, int input_fd[2], int output_fd[2],
 		int original_files[2])
 {
 	int	error_occured;
@@ -33,7 +33,7 @@ void	child(t_px *px, int input_fd[2], int output_fd[2],
 		error(px, ENV_ERROR);
 }
 
-void	parent(t_px *px, int old_pipe[2], int new_pipe[2])
+void	pipex_parent(t_px *px, int old_pipe[2], int new_pipe[2])
 {
 	(void)px;
 	close(new_pipe[WRITE]);

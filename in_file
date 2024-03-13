@@ -15,3 +15,5 @@ mornin'
 3
 2
 1
+
+in_file "cat" "sort -r" "cat -e" out_file
