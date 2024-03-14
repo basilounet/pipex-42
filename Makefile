@@ -17,10 +17,8 @@ OBJS_DIR = OBJ/
 
 ##========== OBJECTS ==========##
 
-PRE_OBJS = $(SRC:.c=.o)
-PRE_MAIN_OBJ = $(MAIN:.c=.o)
-OBJS = $(addprefix $(OBJS_DIR),$(PRE_OBJS))
-MAIN_OBJ = $(addprefix $(OBJS_DIR),$(PRE_MAIN_OBJ))
+OBJS := $(addprefix $(OBJS_DIR),$(SRC:.c=.o))
+MAIN_OBJ = $(addprefix $(OBJS_DIR),$(MAIN:.c=.o))
 
 ##========== COLORS ==========##
 
@@ -70,7 +68,7 @@ all : $(CLEAR) $(NAME)
 
 $(NAME) : $(OBJS) $(LIBFT) $(MAIN_OBJ)
 	@$(CC) -o $(NAME) $(CFLAGS) $(MAIN_OBJ) $(OBJS) $(LDFLAGS)
-	@echo "$(GREEN)Pipex compiled$(BASE_COLOR)"
+	@echo "$(GREEN)-= Pipex compiled =-$(BASE_COLOR)"
 
 $(LIBFT) :
 	@DEBUG=$(DEBUG_MODE) TIMER=$(TIMER) IS_PRINT=$(IS_PRINT) $(MAKE) -C libft --no-print-directory $(J4)
@@ -88,7 +86,6 @@ re : fclean all
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c
 ##	@echo -e "\033[$(shell expr $(NUM_LINES_TO_CLEAR));H\033[K"
-	@mkdir -p $(OBJS_DIR)
 ifeq ($(IS_PRINT),1)
 	@sleep $(TIMER)
 	@clear
@@ -104,8 +101,10 @@ ifeq ($(IS_PRINT),1)
 	done
 	@echo "$(BASE_COLOR)║"
 	@echo "╚==============================================╝"
+
 	@$(eval INDEX=$(shell expr $(INDEX) + 1))
 	@echo "Compiling : $<"
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 else
 	@$(CC) $(CFLAGS) -c $< -o $@

@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 17:54:18 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/03/13 10:03:17 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/03/13 19:03:33 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	sole_pipe(t_px *px, int input_files[2])
 		pipex_child(px, input_files, input_files, input_files);
 	else
 	{
-		close(input_files[READ]);
-		close(input_files[WRITE]);
+		try_close_fd(input_files[READ]);
+		try_close_fd(input_files[WRITE]);
 		wait(NULL);
 	}
 }
@@ -43,8 +43,8 @@ void	first_pipe(t_px *px, int input_files[2], int new_pipe[2])
 		pipex_child(px, input_files, new_pipe, input_files);
 	else
 	{
-		close(input_files[READ]);
-		close(new_pipe[WRITE]);
+		try_close_fd(input_files[READ]);
+		try_close_fd(new_pipe[WRITE]);
 	}
 }
 
@@ -60,8 +60,8 @@ void	last_pipe(t_px *px, int original_files[2], int new_pipe[2])
 		pipex_child(px, new_pipe, original_files, original_files);
 	else
 	{
-		close(original_files[WRITE]);
-		close(new_pipe[READ]);
+		try_close_fd(original_files[WRITE]);
+		try_close_fd(new_pipe[READ]);
 	}
 }
 

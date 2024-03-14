@@ -6,7 +6,7 @@
 /*   By: bvasseur <bvasseur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:25:27 by bvasseur          #+#    #+#             */
-/*   Updated: 2024/03/13 09:37:48 by bvasseur         ###   ########.fr       */
+/*   Updated: 2024/03/14 13:44:21 by bvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	get_new_file(t_px *px, char *stop)
 
 	if (!stop)
 		error(px, MALLOC_ERROR);
-	fd = open("heredoc", O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	fd = open("here_doc", O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)
 		error(px, FILE_ERROR);
 	print_heredoc(px);
@@ -47,22 +47,20 @@ void	get_new_file(t_px *px, char *stop)
 		free(line);
 }
 
-void	here_doc(int ac, char **av, char **env)
+void	here_doc(int ac, char **av, char **env, int is_append)
 {
 	t_px	px;
 	int		input_files[2];
 
-	px = parse(ac - 2, av + 2, env);
+	px = parse(ac - 1, av + 1, env);
+	px.is_append = is_append;
 	get_new_file(&px, ft_strjoin(av[1], "\n"));
-	input_files[READ] = open("heredoc", O_RDONLY);
-	input_files[WRITE] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (input_files[READ] < 0 || input_files[WRITE] < 0)
-		error(&px, FILE_ERROR);
-	else if (ac == 4)
+	create_inputs(ac, av, &px, input_files);
+	if (ac == 4)
 		sole_pipe(&px, input_files);
 	else
 		all_pipes(&px, input_files);
-	unlink("heredoc");
+	unlink("here_doc");
 	unleak(&px);
 	exit(0);
 }
